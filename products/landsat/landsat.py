@@ -1,3 +1,4 @@
+from os.path import basename
 from typing import List
 import numpy as np
 import pandas as pd
@@ -37,6 +38,7 @@ class Landsat(object):
         this_band_df = []
 
         for j, band in enumerate(self.file_paths):
+            file_name = basename(band)
             src = rasterio.open(band)
 
             geoms = self._shapefile.geometry.values
@@ -54,7 +56,7 @@ class Landsat(object):
 
                 elev = np.extract(data != no_data, data)
 
-                df = pd.DataFrame({self.file_paths[j]: elev})
+                df = pd.DataFrame({file_name: elev})
 
                 if j == 0:
                     df[self.classes_column_name] = classes[i]
